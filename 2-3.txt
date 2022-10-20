@@ -1,0 +1,41 @@
+# DistrictProducts2の順位を更新する
+UPDATE DistrictProducts2 AS d1 SET
+	ranking =
+		(
+		# WHEREで条件付けしている対象の値より大きい値の数から順位を取得する
+		SELECT
+			COUNT(d2.price) + 1
+		FROM
+			DistrictProducts AS d2
+		# 同じ地方の値段で自己非等値結合する
+		WHERE
+			d1.district = d2.district
+				AND
+			d2.price > d1.price
+		)
+;
+
+# DistrictProducts2の順位を更新する
+UPDATE DistrictProducts2 AS d1 SET
+	# 順位をd3テーブルから取得する
+	ranking =
+		(
+		SELECT
+			d2.tmpRank
+		FROM
+			(
+			# 地方、名前、順位を取得する
+			SELECT
+				district,
+				name,
+				RANK() OVER(PARTITION BY d3.district ORDER BY d3.price DESC) AS tmpRank
+			FROM
+				DistrictProducts2 AS d3
+			) AS d2
+		# 更新対象のレコードと同じ地方、名前のレコードを対象とする
+		WHERE
+			d1.district = d2.district
+				AND
+			d1.name = d2.name
+		)
+;
