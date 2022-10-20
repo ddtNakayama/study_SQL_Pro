@@ -1,0 +1,23 @@
+# 座席の始点、終点、座席の数を取得する
+SELECT
+	s1.seat AS start_seat,
+	s2.seat AS end_seat,
+	s2.seat - s1.seat + 1 AS seat_cnt
+FROM
+	Seats3 AS s1,
+	Seats3 AS s2,
+	Seats3 AS s3
+WHERE
+	s1.seat <= s2.seat
+		AND
+	S3.seat BETWEEN S1.seat AND S2.seat
+GROUP BY
+	s1.seat,
+	s2.seat
+HAVING
+	COUNT(*) = SUM(CASE
+		WHEN S3.status = '空' THEN 1 
+		WHEN S3.seat -1 = s1.seat THEN 0 
+		WHEN S3.seat +1 = s2.seat THEN 0
+		ELSE 0 END)
+;
