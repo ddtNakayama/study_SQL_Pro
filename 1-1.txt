@@ -1,0 +1,41 @@
+# x,yのうち大きい値を取得する
+SELECT
+	CASE
+		# xとyを比較
+		WHEN x > y
+			# xの値を取得
+			THEN x
+		# yの値を取得
+		ELSE y
+	END
+FROM
+	Greatests
+;
+
+
+# x,y,zのうち大きい値を取得する
+SELECT
+	CASE
+		# xとyを比較
+		WHEN x > y
+			# xとzを比較
+			CASE
+				WHEN x > z
+					# xの値を取得
+					THEN x
+				# zの値を取得
+				ELSE z
+			END
+		ELSE
+			# yとzを比較
+			CASE
+				WHEN y > z
+					# yの値を取得
+					THEN y
+				# zの値を取得
+				ELSE z
+			END
+	END
+FROM
+	Greatests
+;
