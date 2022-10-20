@@ -1,0 +1,17 @@
+# 資材と原産国が重複している拠点を取得する
+SELECT
+	center
+FROM
+	Materials2
+# 拠点、資材、原産国でグループ化する
+GROUP BY
+	center,
+	material,
+	orgland
+HAVING
+	# 資材が重複しているレコードを対象とする
+	COUNT(material) <> COUNT(DISTINCT material)
+		AND
+	# 原産国が重複しているレコードを対象とする
+	COUNT(orgland) <> COUNT(DISTINCT orgland)
+;
