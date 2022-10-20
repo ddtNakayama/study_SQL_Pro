@@ -1,0 +1,41 @@
+# Skillsテーブルの技術と完全一致する社員を取得する
+SELECT DISTINCT
+	emp
+FROM
+	EmpSkills AS ES1
+WHERE
+	# Skillsテーブルの技術から対象社員の技術を減算し、0件となるレコードを対象とする
+	NOT EXISTS
+		(
+			SELECT
+				skill
+			FROM
+				Skills
+		# Skills.skill - EmpSkills.skill
+		# 減算結果が0になれば対象技術をすべて保持していることになる
+		EXCEPT
+			SELECT
+				skill
+			FROM
+				EmpSkills AS ES2
+			WHERE ES1.emp = ES2.emp
+		)
+		AND
+	# 対象社員の技術からSkillsテーブルの技術を減算し、0件となるレコードを対象とする
+	NOT EXISTS
+		(
+			SELECT
+				skill
+			FROM
+				EmpSkills AS ES3
+			WHERE
+				ES1.emp = ES3.emp
+		# EmpSkills.skill - Skills.skill
+		# 減算結果が0になれば対象社員が他の技術を保持していないことになる
+		EXCEPT
+			SELECT
+				skill
+			FROM
+				Skills
+		)
+;
