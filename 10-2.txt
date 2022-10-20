@@ -1,0 +1,15 @@
+# 教科が算数の点数が80以上、国語の点数が50以上の学生IDを取得する
+SELECT
+	student_id
+FROM
+	TestScores AS
+# 学生IDでグループ化する
+GROUP BY
+	student_id
+HAVING
+	# 教科が算数かつ点数が80以上、国語かつ50以上のレコードが2件の学生IDを対象とする
+	2 = SUM( CASE 
+		WHEN subject = '算数' AND score >= 80 THEN 1
+		WHEN subject = '国語' AND score >= 50 THEN 1
+		ELSE 0 END )
+;
