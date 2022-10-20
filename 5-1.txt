@@ -1,0 +1,40 @@
+# 年齢階級、性別コード、東北の人口、関東の人口を取得する
+SELECT
+	MASTER.age_class,
+	MASTER.sex_cd,
+	# 県名が秋田、青森のレコードの人口を集計する
+	SUM(
+		CASE
+			WHEN TblPop.pref_name = '秋田' THEN population
+			WHEN TblPop.pref_name = '青森' THEN population
+			ELSE 0
+		END
+	) AS pop_tohoku,
+	# 県名が東京、千葉のレコードの人口を集計する
+	SUM(
+		CASE
+			WHEN TblPop.pref_name = '東京' THEN population
+			WHEN TblPop.pref_name = '千葉' THEN population
+			ELSE 0
+		END
+	) AS pop_kanto
+FROM
+	# 年齢階級マスタと性別マスタを結合する
+	(
+	SELECT
+		age_class,
+		sex_cd
+	FROM
+		TblAge CROSS JOIN TblSex
+	) MASTER
+# 人口構成テーブルの年齢階級と性別コードが一致するレコードを結合する
+LEFT OUTER JOIN
+	TblPop
+ON
+	MASTER.age_class = TblPop.age_class
+		AND
+	MASTER.sex_cd = TblPop.sex_cd
+# 年齢階級と性別コードごとにグループ化する
+GROUP BY
+	MASTER.age_class,MASTER.sex_cd
+;
