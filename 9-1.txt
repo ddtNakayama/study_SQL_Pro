@@ -1,0 +1,22 @@
+# 本書のシーケンス・ビューがある前提	
+# 欠番を求める
+SELECT
+	seq
+FROM
+	Sequence AS s1
+WHERE
+	# SeqTblに存在するレコード以外を取得する
+	NOT EXISTS
+		(
+		SELECT
+			seq
+		FROM
+			SeqTbl AS s2
+		WHERE
+			s1.seq = s2.seq
+		)
+		AND
+	# 取得する範囲はSeqTblの最小値から最大値までとする
+	s1.seq 
+		BETWEEN ( SELECT MIN(s1.seq) FROM SeqTbl ) AND ( SELECT MAX(s1.seq) FROM SeqTbl )
+;
