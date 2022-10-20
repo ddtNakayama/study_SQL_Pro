@@ -1,0 +1,12 @@
+# 名前の組み合わせを取得する（重複含む）
+SELECT
+	p1.name AS name_1,
+	p2.name AS name_2
+FROM
+	# 自己結合する
+	Products AS p1,
+	Products AS p2
+WHERE
+	# 非等値結合
+	p1.name >= p2.name
+;
