@@ -1,0 +1,10 @@
+SELECT
+	CASE
+		# レコード数と連番の最大値を比較して歯抜けがあるかを判定する
+		WHEN COUNT(*) <> MAX(seq) THEN '歯抜けあり'
+		WHEN COUNT(*) = MAX(seq) THEN '歯抜けなし'
+		ELSE NULL
+	END AS gap
+FROM
+	SeqTbl
+;
