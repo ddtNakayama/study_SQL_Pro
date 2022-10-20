@@ -1,0 +1,17 @@
+SELECT
+	prc_date,
+	prc_amt,
+	# 前レコードまでの処理金額の集計を取得する
+	SUM(prc_amt) OVER (ORDER BY prc_date ) AS anhand_amt
+FROM
+	accounts
+;
+
+SELECT
+	prc_date,
+	prc_amt,
+	# 前レコードまでの処理金額の最大値を取得する
+	MAX(prc_amt) OVER (ORDER BY prc_date ) AS anhand_amt
+FROM
+	accounts
+;
