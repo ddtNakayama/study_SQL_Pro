@@ -1,0 +1,13 @@
+# 宿泊期間が重複しているレコードを取得する
+SELECT
+	reserver,start_date,end_date
+FROM
+	Reservations AS R1,
+	Reservations AS R2
+WHERE
+	# 宿泊客が異なるレコードを対象とする
+	R1.reserver <> R2.reserver
+		AND
+	# R1の宿泊客とR2の宿泊客の期間が重複しているレコードを対象とする
+	(R1.start_date,R1.end_date) OVERLAPS (R2.start_date,R2.end_date)
+;
