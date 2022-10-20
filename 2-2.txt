@@ -1,0 +1,26 @@
+SELECT 
+	# 地方、商品名、値段を取得する
+	d1.district,
+	d1.name,
+	d1.price,
+	# 同じ地方の中で値段の非等値結合を行い、対象の値より大きい値のカウントで順位付けする
+	(SELECT COUNT(d2.price) FROM DistrictProducts AS d2 WHERE d1.district = d2.district AND d2.price > d1.price ) +1 AS rank_1
+FROM
+	DistrictProducts AS d1
+GROUP BY
+	d1.district,
+	d1.name,
+	d1.price
+;
+
+
+SELECT
+	# 地方、商品名、値段を取得する
+	district,
+	name,
+	price,
+	# 地方ごとに値段の降順でランク付けする
+	RANK() OVER (PARTITION BY district ORDER BY price DESC) AS rank_1
+FROM
+	DistrictProducts
+;
