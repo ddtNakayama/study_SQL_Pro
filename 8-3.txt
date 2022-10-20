@@ -1,0 +1,27 @@
+# 素数を取得する
+SELECT
+	num
+FROM
+	Numbers AS n1
+WHERE
+	# 1と自身の値以外で割り切れないレコードを対象とする
+	NOT EXISTS
+		(
+		SELECT
+			*
+		FROM
+			Numbers AS n2
+		WHERE
+			# 自身の値以外
+			n1.num <> n2.num
+				AND
+			# 1以外
+			n2.num <> 1
+				AND
+			# 剰余が0
+			0 = n1.num MOD n2.num
+		)
+	AND
+		# 1は除く
+		n1.num <> 1
+;
