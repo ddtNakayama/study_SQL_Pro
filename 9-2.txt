@@ -1,0 +1,22 @@
+# 状態が空のレコードが3座席連続しているレコードを取得する
+SELECT
+	S1.seat AS start_seat,
+	'～',
+	S2.seat AS end_seat
+FROM
+	Seats AS S1,
+	Seats AS S2,
+	Seats AS S3
+# S1のテーブルを最初の座席、S2のテーブルと最後の座席とする
+# S3のテーブルの座席はS1～S2の座席とする
+WHERE
+	S2.seat = S1.seat + 2
+		AND
+	S3.seat BETWEEN S1.seat AND S2.seat
+GROUP BY
+	S1.seat,
+	S2.seat
+# S1、S2、S3すべてが空のレコードを対象とする
+HAVING
+	COUNT(*) = SUM(CASE WHEN S3.status = '空' THEN 1 ELSE 0 END)
+;
