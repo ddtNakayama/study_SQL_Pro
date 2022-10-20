@@ -1,0 +1,47 @@
+# オール1のエンティティを取得する
+SELECT DISTINCT
+	t1.key
+FROM
+	ArrayTbl2 AS t1
+WHERE
+	# 下記サブクエリに該当しないレコードを対象とする
+	NOT EXISTS
+		(
+		# valが1以外またはNULLのレコードを取得する
+		SELECT
+			*
+		FROM
+			ArrayTbl2 AS t2
+		WHERE
+			t1.key = t2.key
+				AND
+			(val <> 1 OR val IS NULL)
+		)
+;
+
+
+
+
+# オール1のエンティティを取得する
+SELECT
+	t1.key
+FROM
+	ArrayTbl2 AS t1
+WHERE
+	# valの値が1のレコードを対象とする
+	val = 1
+GROUP BY
+	# keyごとにグループ化する
+	key
+HAVING
+	# すべてのvalの値が1のレコード群を対象とする
+	COUNT(*) = 
+		(
+		SELECT
+			COUNT(*)
+		FROM
+			ArrayTbl2 AS t2
+		WHERE
+			t1.key = t2.key
+		)
+;
