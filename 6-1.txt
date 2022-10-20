@@ -1,0 +1,29 @@
+# 前年比を取得する
+SELECT
+	master.year,
+	master.now_sale AS sale,
+	# 今年の年商と前年の年商を比較した結果を取得する
+	CASE
+		WHEN master.now_sale = master.pre_sale THEN '→'
+		WHEN master.now_sale > master.pre_sale THEN '↑'
+		WHEN master.now_sale < master.pre_sale THEN '↓'
+		# 前年比がない場合は-とする
+		ELSE '-'
+	END AS var
+FROM
+	# 今年と前年の年商を持つ中間テーブルを作成する
+	(
+	SELECT
+		# 今年の年度、今年の年商、前年の年商を取得する
+		S1.year,
+		S1.sale AS now_sale,
+		S2.sale AS pre_sale
+	FROM
+		Sales S1
+	LEFT OUTER JOIN
+		Sales S2
+	ON
+		# 今年-1と一致するレコード（=前年）を結合する
+		S1.year -1 = S2.year
+	) AS master
+;
