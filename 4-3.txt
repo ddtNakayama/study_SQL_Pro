@@ -1,0 +1,16 @@
+# 店舗、現存在庫数、不足数を取得する
+SELECT
+	s.shop,
+	COUNT(*) AS my_item_cnt,
+	# Itemsテーブルのレコード数から現存在庫数を引いた値を不足数とする
+	(SELECT COUNT(*) FROM Items) - COUNT(*) AS diff_cnt
+FROM
+	Items AS i,
+	ShopItems AS s
+# 商品が一致するレコードを結合する
+WHERE
+	i.item = s.item
+# 店舗ごとにグループ化する
+GROUP BY
+	s.shop
+;
