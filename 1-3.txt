@@ -1,0 +1,15 @@
+# keyを取得する
+SELECT
+	key
+FROM
+	Greatests
+ORDER BY
+	CASE
+		# keyの並びを置き換えてソートする
+		WHEN key = 'A' THEN 'B'
+		WHEN key = 'B' THEN 'A'
+		WHEN key = 'C' THEN 'D'
+		WHEN key = 'D' THEN 'C'
+		ELSE key
+	END
+;
