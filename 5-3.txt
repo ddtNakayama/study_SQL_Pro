@@ -1,0 +1,19 @@
+# Class_Aに対してClass_Bのレコードをマージする
+MERGE
+	Class_A AS a
+USING
+	Class_B AS b
+# idをマージの条件とする
+ON
+	 a.id = b.id
+# idが一致するレコードが存在する場合
+WHEN MATCHED THEN 
+	# Class_Bの名前に更新する
+	UPDATE SET
+		a.name = b.name
+# Class_BのレコードがClass_Aに存在しない場合
+WHEN NOT MATCHED BY TARGET THEN
+	# Class_BのレコードをClass_Aに追加する
+	INSERT VALUES
+		(b.id,b.name)
+;
