@@ -1,0 +1,29 @@
+# 社員ごとの子供の数を取得する
+SELECT
+	list.employee,
+	COUNT(list.child)
+# 子供1、子供2、子供3を取得したレコードを連結する
+FROM
+	(
+		SELECT
+			employee,
+			child_1 AS child
+		FROM
+			Personnel
+	UNION ALL
+		SELECT
+			employee,
+			child_2 AS child
+		FROM
+			Personnel
+	UNION ALL
+		SELECT
+			employee,
+			child_3 AS child
+		FROM
+			Personnel
+	) AS list
+# 社員ごとにグループ化する
+GROUP BY
+	list.employee
+;
