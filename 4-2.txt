@@ -1,0 +1,16 @@
+SELECT
+	dpt
+FROM
+	Students
+GROUP BY
+	# 学部ごとにグループ化する
+	dpt
+HAVING
+	# グループごとのレコード数と提出日が9月中のレコードの数が一致するレコードを対象とする
+	COUNT(*) = COUNT(
+		CASE
+			WHEN sbmt_date LIKE '2005-09%' THEN sbmt_date
+			ELSE NULL
+		END
+		)
+;
