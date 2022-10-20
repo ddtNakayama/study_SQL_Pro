@@ -1,0 +1,12 @@
+# 工程番号1以下が完了、2以降が待機のレコードを取得する
+SELECT
+	*
+FROM
+	Projects P1
+WHERE
+	# 工程番号1以下がすべて完了のレコードを対象とする
+	'完了' = ALL(SELECT status FROM Projects P2 WHERE P1.project_id = P2.project_id AND P2.step_nbr <= 1)
+		AND
+	# 工程番号2以降がすべて待機のレコードを対象とする
+	'待機' = ALL(SELECT status FROM Projects P2 WHERE P1.project_id = P2.project_id AND P2.step_nbr > 1)
+;
